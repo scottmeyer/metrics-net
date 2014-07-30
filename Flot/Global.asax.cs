@@ -7,6 +7,8 @@ namespace Flot
 {
     public class MvcApplication : HttpApplication
     {
+        private readonly MachineMetrics _machineMetrics = new MachineMetrics();
+        private readonly Metrics _metrics = new Metrics();
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -30,11 +32,11 @@ namespace Flot
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 
-            MachineMetrics.InstallPhysicalDisk();
-            MachineMetrics.InstallLogicalDisk();
-            MachineMetrics.InstallCLRLocksAndThreads();
+            _machineMetrics.InstallPhysicalDisk();
+            _machineMetrics.InstallLogicalDisk();
+            _machineMetrics.InstallCLRLocksAndThreads();
 
-            Metrics.Gauge(typeof (MvcApplication), "hey_you_guys", () =>
+            _metrics.Gauge(typeof (MvcApplication), "hey_you_guys", () =>
                                                                        {
                                                                            return 12;
                                                                        });
